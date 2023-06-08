@@ -1,5 +1,13 @@
 #include "philo.h"
 
+int	get_time(void)
+{
+	static struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * (int)1000) + (tv.tv_usec / 1000));
+}
+
 t_params *parsing(char **arg, int n)
 {
     char *str;
@@ -22,6 +30,8 @@ t_params *parsing(char **arg, int n)
     res->time_to_die = ft_atoi(verified[1]);
     res->time_to_eat = ft_atoi(verified[2]);
     res->time_to_sleep = ft_atoi(verified[3]);
+    res->start = get_time();
+    res->is_dead = 0;
     if (n == 6)
         res->number_of_times_each_philosopher_must_eat = ft_atoi(verified[4]);
     free(verified);
@@ -38,4 +48,5 @@ int main(int argc, char **argv)
     if (!params)
         return (0);
     start_agora(create_philo(params), params->number_of_philosophers);
+    return(0);
 }
