@@ -30,10 +30,11 @@ t_params *parsing(char **arg, int n)
     res->time_to_die = ft_atoi(verified[1]);
     res->time_to_eat = ft_atoi(verified[2]);
     res->time_to_sleep = ft_atoi(verified[3]);
-    res->start = get_time();
     res->is_dead = 0;
     if (n == 6)
         res->number_of_times_each_philosopher_must_eat = ft_atoi(verified[4]);
+    else
+        res->number_of_times_each_philosopher_must_eat = -1;
     free(verified);
     return (res);
     

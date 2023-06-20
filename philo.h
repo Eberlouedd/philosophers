@@ -16,7 +16,6 @@ typedef struct s_params{
 	int time_to_sleep;
 	int number_of_times_each_philosopher_must_eat;
 	int is_dead;
-	int start;
 
 }				t_params;
 
@@ -26,6 +25,9 @@ typedef struct s_philo{
     pthread_mutex_t		mutex;
 	t_params *params;
 	int time_since_meal;
+	int start;
+	int pass;
+	int nb_eat;
 
 }				t_philo;
 

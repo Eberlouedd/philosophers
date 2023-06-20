@@ -4,8 +4,9 @@ t_philo **create_philo(t_params *params)
 {
     int i = 0;
     t_philo **philo;
+    int s;
 
-
+    s = get_time();
     philo = malloc(params->number_of_philosophers * sizeof(t_philo *));
     while (i < params->number_of_philosophers)
     {
@@ -13,6 +14,8 @@ t_philo **create_philo(t_params *params)
         p = malloc(sizeof(t_philo));
         p->num = i+1;
         p->time_since_meal = get_time();
+        p->start = s;
+        p->pass = 1;
         pthread_mutex_init(&(params->fork[i]), NULL);
         pthread_mutex_init(&(p->mutex), NULL);
         p->params = params;
@@ -29,10 +32,10 @@ void *philo_essence(void *args){
     p = (t_philo *) args;
     if(p->num % 2 == 0)
     {
-        printf("%d %d is thinking\n ", get_time() - p->params->start, p->num);
-        usleep(p->params->time_to_sleep * 1000);
+        printf("%d %d is thinking\n ", get_time() - p->start, p->num);
+        usleep(5000);
     }
-    while(!p->params->is_dead)
+    while(!p->params->is_dead && (p->nb_eat < p->params->number_of_times_each_philosopher_must_eat || p->params->number_of_times_each_philosopher_must_eat == -1))
     {
         if(p->num % 2 == 0)
         {
@@ -43,23 +46,45 @@ void *philo_essence(void *args){
                 pthread_mutex_lock(&(p->params->fork[p->num]));
             usleep(300);
             if(!p->params->is_dead)
-                printf("%d %d in eating\n ", (int)(get_time() - p->params->start), p->num);
+                printf("%d %d is eating\n ", (int)(get_time() - p->start), p->num);
             usleep(p->params->time_to_eat * 1000);
+            p->nb_eat++;
             p->time_since_meal = get_time();
         }
         else
         {
-            pthread_mutex_lock(&(p->params->fork[p->num]));
-            pthread_mutex_lock(&(p->params->fork[p->num-1]));
-            usleep(300);
-            if(!p->params->is_dead)
-                printf("%d %d is eating\n ", get_time() - p->params->start, p->num);
-            usleep(p->params->time_to_eat * 1000);
-            p->time_since_meal = get_time();
+            if(p->params->number_of_philosophers % 2 != 0 && p->num == p->pass)
+            {
+                printf("%d %d is thinking\n ", get_time() - p->start, p->num);
+                usleep(6000);
+                if(p->pass + 2 > p->params->number_of_philosophers)
+                    p->pass = 1;
+                else
+                    p->pass += 2;
+                continue;
+            }
+            else
+            {
+                if(p->num == p->params->number_of_philosophers)
+                    pthread_mutex_lock(&(p->params->fork[0]));
+                else
+                    pthread_mutex_unlock(&(p->params->fork[p->num]));
+                pthread_mutex_lock(&(p->params->fork[p->num-1]));
+                usleep(300);
+                if(!p->params->is_dead)
+                    printf("%d %d is eating\n ", get_time() - p->start, p->num);
+                usleep(p->params->time_to_eat * 1000);
+                p->nb_eat++;
+                p->time_since_meal = get_time();
+                if(p->pass + 2 > p->params->number_of_philosophers)
+                    p->pass = 1;
+                else
+                    p->pass += 2;
+            }
         }
         usleep(300);
         if(!p->params->is_dead)
-            printf("%d %d is sleeping\n ", get_time() - p->params->start, p->num);
+            printf("%d %d is sleeping\n ", get_time() - p->start, p->num);
         if(p->num == p->params->number_of_philosophers)
             pthread_mutex_unlock(&(p->params->fork[0]));
         else
@@ -75,21 +100,25 @@ void *check(void *args)
     t_philo **p;
     int nb;
     int i;
+    int eaten;
 
+    eaten = 0;
     p = (t_philo**) args;
     nb = p[0]->params->number_of_philosophers;
     i = 0;
-    while (i < nb && !p[0]->params->is_dead)
+    while (i < nb && !p[0]->params->is_dead && (eaten < p[i]->params->number_of_times_each_philosopher_must_eat || p[i]->params->number_of_times_each_philosopher_must_eat == 1))
     {
-        if((get_time()) - p[i]->time_since_meal > p[i]->params->time_to_die)
+        if((get_time()) - p[i]->time_since_meal > p[i]->params->time_to_die && (p[i]->nb_eat < p[i]->params->number_of_times_each_philosopher_must_eat || p[i]->params->number_of_times_each_philosopher_must_eat == -1))
         {
             p[0]->params->is_dead = 1;
-            printf("%d %d died\n", get_time() - p[0]->params->start, i + 1);
-            //mutex_detroyer(p[0]->params);
+            printf("%d %d died\n", get_time() - p[0]->start, i + 1);
+            mutex_detroyer(p[0]->params);
         }
         i++;
         if(i == nb)
             i = 0;
+        if(p[i]->nb_eat >= p[i]->params->number_of_times_each_philosopher_must_eat)
+            eaten++;
     }
 }
 
