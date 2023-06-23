@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:37:01 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 18:13:43 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/23 19:08:18 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,6 @@ t_philo **create_philo(t_fac *params);
 void 	start_agora(t_philo **philo, int n);
 void 	mutex_detroyer(t_fac *params);
 int	get_time(void);
-void even_philo(t_philo *p);
-void odd_philo(t_philo *p);
-void after_eat(t_philo *p);
-void tour_pass(t_philo *p);
-void even_entry(t_philo *p);
+void	free_double_char(char	**str);
 
 #endif

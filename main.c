@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:36:14 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 18:25:30 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/23 19:08:34 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ t_fac *parsing(char **arg, int n)
     free(str);
     if(!valide_entry(verified, n))
     {
-        free(verified);
+        free_double_char(verified);
         return(NULL);
     }
     res = affect_struct(verified, n);
-    free(verified);
+    free_double_char(verified);
     return (res);
 }
 
