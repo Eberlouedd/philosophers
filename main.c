@@ -16,6 +16,8 @@ t_params *parsing(char **arg, int n)
     int i = 0;
 
     res = malloc(sizeof(t_params*));
+    if (!res)
+        return (NULL);
     str = ft_strrejoin(n, arg, " ", 1);
     while (str[i])
     {
@@ -27,6 +29,8 @@ t_params *parsing(char **arg, int n)
     free(str);
     res->number_of_philosophers = ft_atoi(verified[0]);
     res->fork = malloc(ft_atoi(verified[0]) * sizeof(pthread_mutex_t));
+    if(!res->fork)
+        return (NULL);
     res->time_to_die = ft_atoi(verified[1]);
     res->time_to_eat = ft_atoi(verified[2]);
     res->time_to_sleep = ft_atoi(verified[3]);
@@ -37,7 +41,6 @@ t_params *parsing(char **arg, int n)
         res->number_of_times_each_philosopher_must_eat = -1;
     free(verified);
     return (res);
-    
 }
 
 int main(int argc, char **argv)

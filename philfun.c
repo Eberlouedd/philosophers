@@ -17,7 +17,6 @@ t_philo **create_philo(t_params *params)
         p->start = s;
         p->pass = 1;
         pthread_mutex_init(&(params->fork[i]), NULL);
-        pthread_mutex_init(&(p->mutex), NULL);
         p->params = params;
         philo[i] = p;
         i++;
@@ -31,66 +30,23 @@ void *philo_essence(void *args){
 
     p = (t_philo *) args;
     if(p->num % 2 == 0)
-    {
-        printf("%d %d is thinking\n ", get_time() - p->start, p->num);
-        usleep(5000);
-    }
+        even_entry(p);
     while(!p->params->is_dead && (p->nb_eat < p->params->number_of_times_each_philosopher_must_eat || p->params->number_of_times_each_philosopher_must_eat == -1))
     {
         if(p->num % 2 == 0)
-        {
-            pthread_mutex_lock(&(p->params->fork[p->num-1]));
-            if(p->num == p->params->number_of_philosophers)
-                pthread_mutex_lock(&(p->params->fork[0]));
-            else
-                pthread_mutex_lock(&(p->params->fork[p->num]));
-            usleep(300);
-            if(!p->params->is_dead)
-                printf("%d %d is eating\n ", (int)(get_time() - p->start), p->num);
-            usleep(p->params->time_to_eat * 1000);
-            p->nb_eat++;
-            p->time_since_meal = get_time();
-        }
+            even_philo(p);
         else
         {
             if(p->params->number_of_philosophers % 2 != 0 && p->num == p->pass)
             {
-                printf("%d %d is thinking\n ", get_time() - p->start, p->num);
-                usleep(6000);
-                if(p->pass + 2 > p->params->number_of_philosophers)
-                    p->pass = 1;
-                else
-                    p->pass += 2;
+                tour_pass(p);
                 continue;
             }
             else
-            {
-                if(p->num == p->params->number_of_philosophers)
-                    pthread_mutex_lock(&(p->params->fork[0]));
-                else
-                    pthread_mutex_unlock(&(p->params->fork[p->num]));
-                pthread_mutex_lock(&(p->params->fork[p->num-1]));
-                usleep(300);
-                if(!p->params->is_dead)
-                    printf("%d %d is eating\n ", get_time() - p->start, p->num);
-                usleep(p->params->time_to_eat * 1000);
-                p->nb_eat++;
-                p->time_since_meal = get_time();
-                if(p->pass + 2 > p->params->number_of_philosophers)
-                    p->pass = 1;
-                else
-                    p->pass += 2;
-            }
+                odd_philo(p);
         }
         usleep(300);
-        if(!p->params->is_dead)
-            printf("%d %d is sleeping\n ", get_time() - p->start, p->num);
-        if(p->num == p->params->number_of_philosophers)
-            pthread_mutex_unlock(&(p->params->fork[0]));
-        else
-            pthread_mutex_unlock(&(p->params->fork[p->num]));
-        pthread_mutex_unlock(&(p->params->fork[p->num-1]));
-        usleep(p->params->time_to_sleep * 1000);
+        after_eat(p);
     }
     pthread_exit(NULL);
 }
@@ -120,6 +76,7 @@ void *check(void *args)
         if(p[i]->nb_eat >= p[i]->params->number_of_times_each_philosopher_must_eat)
             eaten++;
     }
+    pthread_exit(NULL);
 }
 
 void start_agora(t_philo **philo, int n){

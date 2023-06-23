@@ -22,7 +22,6 @@ typedef struct s_params{
 typedef struct s_philo{
 	int num;
 	pthread_t p;
-    pthread_mutex_t		mutex;
 	t_params *params;
 	int time_since_meal;
 	int start;
@@ -39,4 +38,9 @@ t_philo **create_philo(t_params *params);
 void 	start_agora(t_philo **philo, int n);
 void 	mutex_detroyer(t_params *params);
 int	get_time(void);
+void even_philo(t_philo *p);
+void odd_philo(t_philo *p);
+void after_eat(t_philo *p);
+void tour_pass(t_philo *p);
+void even_entry(t_philo *p);
 #endif
