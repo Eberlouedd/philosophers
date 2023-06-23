@@ -6,7 +6,7 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:36:14 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 18:21:25 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/23 18:25:30 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ t_fac *parsing(char **arg, int n)
     t_fac *res;
     int i = 0;
 
-    res = malloc(sizeof(t_fac*));
-    if (!res)
-        return (NULL);
     str = ft_strrejoin(n, arg, " ", 1);
     while (str[i])
     {
         if((str[i] > '9' || str[i] < '0') && str[i] != ' ')
+        {
+            free(str);
             return NULL;
+        }
         i++;
     }
     verified = ft_split(str, ' ');
@@ -95,6 +95,7 @@ int main(int argc, char **argv)
         return (0);
     // start_agora(create_philo(params), params->number_of_philosophers);
     printf("oui");
+    free(fac->fork);
     free(fac);
     return(0);
 }
