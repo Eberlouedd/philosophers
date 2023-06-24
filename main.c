@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
+/*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:36:14 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 19:08:34 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/24 15:10:10 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int valide_entry(char **entry, int n)
 t_fac *affect_struct(char **entry, int n)
 {
     t_fac *structur;
+    int i;
 
+    i = -1;
     structur = malloc(sizeof(t_fac));
     if(!structur)
         return (NULL);
@@ -44,10 +46,13 @@ t_fac *affect_struct(char **entry, int n)
     structur->fork = malloc(ft_atoi(entry[0]) * sizeof(pthread_mutex_t));
     if(!structur->fork)
         return (NULL);
+    while (++i < ft_atoi(entry[0]))
+        pthread_mutex_init(&(structur->fork[i]), NULL);
     structur->time_to_die = ft_atoi(entry[1]);
     structur->time_to_eat = ft_atoi(entry[2]);
     structur->time_to_sleep = ft_atoi(entry[3]);
     structur->is_dead = 0;
+    structur->pass = 1;
     if (n == 6)
         structur->number_of_times_each_philosopher_must_eat = ft_atoi(entry[4]);
     else
@@ -93,8 +98,7 @@ int main(int argc, char **argv)
     fac = parsing(argv, argc);
     if (!fac)
         return (0);
-    // start_agora(create_philo(params), params->number_of_philosophers);
-    printf("oui");
+    start_agora(fac);
     free(fac->fork);
     free(fac);
     return(0);

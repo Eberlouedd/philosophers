@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
+/*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:37:01 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 19:08:18 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/24 17:32:55 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@ typedef struct s_fac{
 	int time_to_sleep;
 	int number_of_times_each_philosopher_must_eat;
 	int is_dead;
+	int pass;
+	int start;
     pthread_mutex_t		*fork;
-
+    pthread_mutex_t		mutex_print;
+    pthread_mutex_t		mutex_pass;
+    pthread_mutex_t		mutex_dead;
 }				t_fac;
 
 typedef struct s_philo{
@@ -36,10 +40,7 @@ typedef struct s_philo{
 	pthread_t p;
 	t_fac *fac;
 	int time_since_meal;
-	int start;
-	int pass;
 	int nb_eat;
-
 }				t_philo;
 
 
@@ -47,9 +48,11 @@ char	*ft_strrejoin(int size, char **strs, char *sep, int start);
 int	    ft_atoi(const char *nptr);
 char	**ft_split(const char *str, char c);
 t_philo **create_philo(t_fac *params);
-void 	start_agora(t_philo **philo, int n);
+void 	start_agora(t_fac *fac);
 void 	mutex_detroyer(t_fac *params);
 int	get_time(void);
 void	free_double_char(char	**str);
+void free_philo_tab(t_philo **philo, int nb);
+void mutex_print(char *str, t_philo *p);
 
 #endif
