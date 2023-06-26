@@ -6,7 +6,7 @@
 /*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:36:25 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/26 06:35:51 by skhali           ###   ########.fr       */
+/*   Updated: 2023/06/26 07:43:12 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_philo **create_philo(t_fac *fac)
         p = malloc(sizeof(t_philo));
         p->num = i+1;
         p->nb_eat = 0;
-        p->think = 1;
         p->time_since_meal = get_time();
         pthread_mutex_init(&(p->mutex_tsm), NULL);
         pthread_mutex_init(&(p->mutex_eat), NULL);
@@ -47,24 +46,19 @@ void *philo_essence(void *args){
         if (p->num % 2 == 0)
             even_eat(p);
         else
+            odd_eat(p);
+        if(p->fac->number_of_philosophers != 1)
         {
-            pthread_mutex_lock(&(p->fac->mutex_pass));
-            if(p->num == p->fac->pass && p->fac->number_of_philosophers % 2 != 0)
-            {
-                philo_pass(p);
-                pthread_mutex_unlock(&(p->fac->mutex_pass));
-                continue;
-            }
-            else
-                odd_eat(p);
-            pthread_mutex_unlock(&(p->fac->mutex_pass));
+            philo_put_fork(p);
+            if(!return_dead_state(p))
+                mutex_print("is sleeping", p);
+            usleep(p->fac->time_to_sleep * 1000);
+            if(!return_dead_state(p))
+                mutex_print("is thinking", p);
+            usleep(100);
         }
-        philo_put_fork(p);
-        if(!return_dead_state(p))
-            mutex_print("is sleeping", p);
-        usleep(p->fac->time_to_sleep * 1000);
     }
-    pthread_exit(NULL);
+    return(NULL);
 }
 
 void *check(void *args)
@@ -95,7 +89,7 @@ void *check(void *args)
             eaten++;
         pthread_mutex_unlock(&(p[i]->mutex_eat));
     }
-    pthread_exit(NULL);
+    return(NULL);
 }
 
 void start_agora(t_fac *fac){
@@ -105,7 +99,6 @@ void start_agora(t_fac *fac){
 
     fac->start = get_time();
     pthread_mutex_init(&(fac->mutex_print), NULL);
-    pthread_mutex_init(&(fac->mutex_pass), NULL);
     pthread_mutex_init(&(fac->mutex_dead), NULL);
     philo = create_philo(fac);
     i = 0;

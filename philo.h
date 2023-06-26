@@ -6,7 +6,7 @@
 /*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:37:01 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/26 06:18:22 by skhali           ###   ########.fr       */
+/*   Updated: 2023/06/26 07:29:48 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct s_fac{
 	int start;
     pthread_mutex_t		*fork;
     pthread_mutex_t		mutex_print;
-    pthread_mutex_t		mutex_pass;
     pthread_mutex_t		mutex_dead;
 }				t_fac;
 
@@ -43,7 +42,6 @@ typedef struct s_philo{
 	int nb_eat;
     pthread_mutex_t		mutex_tsm;
     pthread_mutex_t		mutex_eat;
-	int think;
 }				t_philo;
 
 

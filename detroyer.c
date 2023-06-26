@@ -6,7 +6,7 @@
 /*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:36:51 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/26 04:26:41 by skhali           ###   ########.fr       */
+/*   Updated: 2023/06/26 07:28:24 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void mutex_detroyer(t_fac *params){
 
     i = 0;
     pthread_mutex_destroy(&(params->mutex_dead));
-    pthread_mutex_destroy(&(params->mutex_pass));
     pthread_mutex_destroy(&(params->mutex_print));
     while(i < params->number_of_philosophers){
         pthread_mutex_destroy(&(params->fork[i]));
