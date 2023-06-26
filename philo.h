@@ -6,7 +6,7 @@
 /*   By: skhali <skhali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:37:01 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/24 17:32:55 by skhali           ###   ########.fr       */
+/*   Updated: 2023/06/26 06:18:22 by skhali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ typedef struct s_philo{
 	t_fac *fac;
 	int time_since_meal;
 	int nb_eat;
+    pthread_mutex_t		mutex_tsm;
+    pthread_mutex_t		mutex_eat;
+	int think;
 }				t_philo;
 
 
@@ -54,5 +57,14 @@ int	get_time(void);
 void	free_double_char(char	**str);
 void free_philo_tab(t_philo **philo, int nb);
 void mutex_print(char *str, t_philo *p);
+void even_thinking(t_philo *p);
+void even_eat(t_philo *p);
+void philo_pass(t_philo *p);
+void odd_eat(t_philo *p);
+void philo_put_fork(t_philo *p);
+int return_dead_state(t_philo *p);
+int return_time_state(t_philo *p);
+void mutex_detroyer_philo(t_philo **p);
+int return_nb_eat(t_philo *p);
 
 #endif
