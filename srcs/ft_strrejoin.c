@@ -6,11 +6,11 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:35:55 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 13:35:59 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/27 18:47:56 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philosopher.h"
 
 int	ft_strlen(const char *str)
 {
@@ -47,6 +47,7 @@ int	ft_long_gen(int size, char **strs, char *sep, int start)
 {
 	int	i;
 	int	count;
+
 	i = start;
 	count = 0;
 	while (i < size)
@@ -66,7 +67,7 @@ char	*ft_strrejoin(int size, char **strs, char *sep, int start)
 	if (start > size)
 		start = 0;
 	i = start;
-	if (size == 0 )
+	if (size == 0)
 	{
 		res = malloc(sizeof(char));
 		res[0] = '\0';

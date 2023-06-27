@@ -6,11 +6,11 @@
 /*   By: kyacini <kyacini@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:35:44 by kyacini           #+#    #+#             */
-/*   Updated: 2023/06/23 13:36:00 by kyacini          ###   ########.fr       */
+/*   Updated: 2023/06/27 18:59:03 by kyacini          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philosopher.h"
 
 static int	word_count(char *s, char c)
 {
